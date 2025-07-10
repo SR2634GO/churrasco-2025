@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Churrasco 2025 🍖</title>
+  <title>Churrasco 2025 🅓</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
@@ -11,13 +10,19 @@
       --cor-secundaria: #f4f4f4;
       --cor-texto: #333;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       background: var(--cor-secundaria);
       color: var(--cor-texto);
     }
+
     .container {
       max-width: 500px;
       margin: 40px auto;
@@ -26,17 +31,24 @@
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
-    h1 { text-align: center; color: var(--cor-principal); }
+
+    h1 {
+      text-align: center;
+      color: var(--cor-principal);
+    }
+
     p.descricao {
       text-align: center;
       font-size: 16px;
       margin-bottom: 30px;
     }
+
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
     }
+
     input, button {
       width: 100%;
       padding: 12px;
@@ -45,6 +57,7 @@
       border: 1px solid #ccc;
       font-size: 16px;
     }
+
     button {
       background-color: var(--cor-principal);
       color: white;
@@ -52,7 +65,11 @@
       cursor: pointer;
       transition: 0.3s;
     }
-    button:hover { background-color: #a93226; }
+
+    button:hover {
+      background-color: #a93226;
+    }
+
     #resultado {
       margin-top: 30px;
       display: none;
@@ -61,6 +78,7 @@
       border-radius: 10px;
       border-left: 5px solid #2ecc71;
     }
+
     textarea {
       width: 100%;
       height: 100px;
@@ -71,6 +89,7 @@
       border: 1px dashed #2ecc71;
       resize: none;
     }
+
     @media (max-width: 600px) {
       .container {
         margin: 20px;
@@ -81,78 +100,79 @@
 </head>
 <body>
   <div class="container">
-    <h1>Churrasco 2025 🍖</h1>
+    <h1>Churrasco 2025 🅓</h1>
     <p class="descricao">Garanta já seu ingresso! Preencha os dados abaixo para gerar o Pix automaticamente.</p>
-    
+
     <form id="form">
-      <label for="cpf">CPF</label>
-      <input type="text" name="cpf" id="cpf" required>
+      <label for="matricula">Matrícula</label>
+      <div style="display: flex; gap: 5px;">
+        <span style="padding: 12px; background: #eee; border: 1px solid #ccc; border-radius: 5px 0 0 5px;">C</span>
+        <input type="text" name="matricula" maxlength="6" pattern="\d{6}" required style="flex: 1; border-radius: 0 5px 5px 0;">
+      </div>
 
       <label for="nome">Nome completo</label>
       <input type="text" name="nome" required>
+
+      <label for="codigoUnidade">Código da unidade de vinculação (4 números)</label>
+      <input type="number" name="codigoUnidade" min="0" max="9999" required oninput="this.value = this.value.slice(0, 4)">
+
       <label for="whatsapp">WhatsApp com DDD</label>
-      <input type="text" name="whatsapp" required>
+      <input type="tel" name="whatsapp" id="whatsapp" required>
+
       <label>Ingressos adulto (R$ 100,00)</label>
-      <input type="number" name="adulto" min="0" value="0" required>
+      <input type="number" name="adulto" min="0" value="0" required oninput="this.value = this.value.replace(/[^\d]/g, '')">
+
       <label>Crianças de 8 a 12 anos (R$ 50,00)</label>
-      <input type="number" name="crianca" min="0" value="0" required>
+      <input type="number" name="crianca" min="0" value="0" required oninput="this.value = this.value.replace(/[^\d]/g, '')">
+
       <label>Crianças menores de 8 anos (gratuito)</label>
-      <input type="number" name="bebes" min="0" value="0" required>
+      <input type="number" name="bebes" min="0" value="0" required oninput="this.value = this.value.replace(/[^\d]/g, '')">
+
       <button type="submit">Gerar Pix</button>
     </form>
+
     <div id="resultado">
       <h3>Seu Pix está pronto!</h3>
       <p>Copie e cole no app bancário para pagar:</p>
       <textarea id="pix" readonly></textarea>
     </div>
   </div>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
   <script>
-    function validarCPF(cpf) {
-      cpf = cpf.replace(/[^\d]+/g,'');
-      if(cpf == '' || cpf.length != 11 || /^(\d)+$/.test(cpf)) return false;
-      let soma = 0, resto;
-      for(let i=1; i<=9; i++) soma += parseInt(cpf.substring(i-1,i))*(11-i);
-      resto = (soma*10)%11;
-      if(resto == 10 || resto == 11) resto = 0;
-      if(resto != parseInt(cpf.substring(9,10))) return false;
-      soma = 0;
-      for(let i=1; i<=10; i++) soma += parseInt(cpf.substring(i-1,i))*(12-i);
-      resto = (soma*10)%11;
-      if(resto == 10 || resto == 11) resto = 0;
-      return resto == parseInt(cpf.substring(10,11));
-    }
-
-    $(document).ready(function(){
-      $('#cpf').mask('000.000.000-00');
-      $('input[name="whatsapp"]').mask('(00) 00000-0000');
-      $('input[type="number"]').on('keypress', function(evt) {
-        if (evt.which < 48 || evt.which > 57) {
-          evt.preventDefault();
-        }
-      });
-    });
-  </script>
-
     const form = document.getElementById('form');
     const resultado = document.getElementById('resultado');
     const pix = document.getElementById('pix');
+
+    // Máscara para o campo WhatsApp
+    document.getElementById('whatsapp').addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
+      if (value.length > 0) value = '(' + value;
+      if (value.length > 3) value = value.slice(0, 3) + ') ' + value.slice(3);
+      if (value.length > 10) value = value.slice(0, 10) + '-' + value.slice(10);
+      e.target.value = value;
+    });
+
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
+
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
+
       const valor =
         (parseInt(data.adulto || 0) * 100) +
         (parseInt(data.crianca || 0) * 50);
+
       data.valor = valor;
+
       const response = await fetch('URL_DO_WEBHOOK_ZAPIER', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
       });
+
       const result = await response.json();
+
       if (result && result.pixCopyPaste) {
         pix.value = result.pixCopyPaste;
         resultado.style.display = 'block';
