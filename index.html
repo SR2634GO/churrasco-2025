@@ -119,7 +119,7 @@
       <label for="whatsapp">WhatsApp com (DDD)</label>
       <input type="tel" name="whatsapp" id="whatsapp" required>
 
-      <label>Ingressos adulto (R$ 100,00)</label>
+      <label>Ingressos Adulto (R$ 100,00)</label>
       <input type="number" name="adulto" min="0" value="0" required oninput="this.value = this.value.replace(/[^\d]/g, '')">
 
       <label>Crianças de 8 a 12 anos (R$ 50,00)</label>
@@ -139,12 +139,14 @@
   </div>
 
   <script>
+  window.addEventListener('DOMContentLoaded', () => {
     console.log("JavaScript carregado");
+
     const form = document.getElementById('form');
     const resultado = document.getElementById('resultado');
     const pix = document.getElementById('pix');
 
-    // Máscara para o campo WhatsApp
+    // Máscara WhatsApp
     document.getElementById('whatsapp').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       if (value.length > 11) value = value.slice(0, 11);
@@ -183,6 +185,8 @@
         alert("Erro ao gerar Pix. Tente novamente.");
       }
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
